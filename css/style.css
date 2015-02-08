@@ -63,7 +63,6 @@ h2, h3, h4, h5 {
   color: #999999;
   line-height: 16px;
   float: right;
-
 }
 
 p {
@@ -75,7 +74,6 @@ p {
 a {
   color: #1199C3;
   text-decoration: none;
-  margin-top: 10px;
   display: block;
 }
 
@@ -213,3 +211,65 @@ span {
     display: block;
   }
 }
+
+
+
+// additional entries
+
+flex-item {
+  width: 200px;
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: row;
+}
+
+#workExperience  {
+	padding-left: 80px;
+	padding-right: 0;
+	margin: 0;
+}
+
+#workemployer {
+	display: inline;
+}
+
+#onlinetitle{
+	display: inline;
+}
+
+#schoolname{
+	display: inline;
+}
+
+#projects  {
+	padding-left: 80px;
+}
+
+#education  {
+	padding-left: 80px;
+}
+
+#mapDiv  {
+	padding-left: 80px;
+}
+
+.url-text {
+  font-style: italic;
+  font-size: 14px;
+  color: #999999;
+  line-height: 16px;
+}
+
+.date-text {
+  float: none;
+}
+
+.location-text {
+  float: none;
+}
+
+a {
+  display: inline;
+}
+
+

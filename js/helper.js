@@ -30,30 +30,30 @@ var HTMLskillsStart = '<h3 id="skillsH3">Skills at a Glance:</h3><ul id="skills"
 var HTMLskills = '<li class="flex-item"><span class="white-text">%data%</span></li>';
 
 var HTMLworkStart = '<div class="work-entry"></div>';
-var HTMLworkEmployer = '<a href="#">%data%';
+var HTMLworkEmployer = '<a id="workemployer" href="#">%data%';
 var HTMLworkTitle = ' - %data%</a>';
 var HTMLworkDates = '<div class="date-text">%data%</div>';
 var HTMLworkLocation = '<div class="location-text">%data%</div>';
-var HTMLworkDescription = '<p><br>%data%</p>';
+var HTMLworkDescription = '<p>%data%</p>';
 
 var HTMLprojectStart = '<div class="project-entry"></div>';
 var HTMLprojectTitle = '<a href="#">%data%</a>';
 var HTMLprojectDates = '<div class="date-text">%data%</div>';
-var HTMLprojectDescription = '<p><br>%data%</p>';
+var HTMLprojectDescription = '<p>%data%</p>';
 var HTMLprojectImage = '<img src="%data%">';
 
 var HTMLschoolStart = '<div class="education-entry"></div>';
-var HTMLschoolName = '<a href="#">%data%';
+var HTMLschoolName = '<a id="schoolname" href="#">%data%';
 var HTMLschoolDegree = ' -- %data%</a>';
 var HTMLschoolDates = '<div class="date-text">%data%</div>';
-var HTMLschoolLocation = '<div class="location-text">%data%</div>';
+var HTMLschoolLocation = '<div class="location-text">%data%</div><br>';
 var HTMLschoolMajor = '<em><br>Major: %data%</em>';
 
 var HTMLonlineClasses = '<h3>Online Classes</h3>';
-var HTMLonlineTitle = '<a href="#">%data%';
+var HTMLonlineTitle = '<a id="onlinetitle" href="#">%data%';
 var HTMLonlineSchool = ' - %data%</a>';
 var HTMLonlineDates = '<div class="date-text">%data%</div>';
-var HTMLonlineURL = '<br><a href="#">%data%</a>';
+var HTMLonlineURL = '<a class="url-text" href="#">%data%</a><br>';
 
 var internationalizeButton = '<button>Internationalize</button>';
 var googleMap = '<div id="map"></div>';
@@ -64,10 +64,25 @@ The International Name challenge in Lesson 2 where you'll create a function that
 */
 $(document).ready(function() {
   $('button').click(function() {
-    var iName = inName() || function(){};
-    $('#name').html(iName);  
+	// console.log("Internationalization button activated");
+	var name =  $('#name').html();
+    //var iName = inName() || function(){};
+	name = inName(name);
+    $('#name').html(name);  
   });
 });
+
+function inName(name) {
+	name = name.split(" ");
+	if (name[1] == name[1].toUpperCase()) {
+		var first = name[1][0];
+		name[1] = name[1].toLowerCase();
+		name[1] = first.concat(name[1].substr(1));
+	} else {
+		name[1] = name[1].toUpperCase();
+	}
+	return name[0] + " " + name[1];
+};
 
 /*
 The next few lines about clicks are for the Collecting Click Locations quiz in Lesson 2.
@@ -82,13 +97,12 @@ function logClicks(x,y) {
     }
   );
   console.log('x location: ' + x + '; y location: ' + y);
-}
+};
 
 $(document).click(function(loc) {
-  // your code goes here!
+//	console.log("got a click");
+	logClicks(loc.pageX,loc.pageY); 
 });
-
-
 
 /*
 This is the fun part. Here's where we generate the custom Google Map for the website.
@@ -97,47 +111,53 @@ https://developers.google.com/maps/documentation/javascript/reference
 */
 var map;    // declares a global map variable
 
-
 /*
 Start here! initializeMap() is called when page is loaded.
 */
 function initializeMap() {
 
-  var locations;
+	var locations;
 
-  var mapOptions = {
-    disableDefaultUI: true
-  };
+	var mapOptions = {
+	  center: { lat: -34.397, lng: 150.644},
+	  zoom: 4 // 8
+	};
 
   // This next line makes `map` a new Google Map JavaScript Object and attaches it to
   // <div id="map">, which is appended as part of an exercise late in the course.
-  map = new google.maps.Map(document.querySelector('#map'), mapOptions);
+     map = new google.maps.Map(document.querySelector('#mapDiv'), mapOptions);
 
-
+	console.log('initializeMap called ...');
   /*
   locationFinder() returns an array of every location string from the JSONs
   written for bio, education, and work.
   */
   function locationFinder() {
+	  console.log('locationfinder called');
 
     // initializes an empty array
     var locations = [];
 
     // adds the single location property from bio to the locations array
     locations.push(bio.contacts.location);
+    console.log('added bio.contacts.location ...');
 
     // iterates through school locations and appends each location to
     // the locations array
     for (var school in education.schools) {
-      locations.push(education.schools[school].location);
+        locations.push(education.schools[school].location);
+        console.log('added school.location ...');
     }
+ 
 
     // iterates through work locations and appends each location to
     // the locations array
     for (var job in work.jobs) {
-      locations.push(work.jobs[job].location);
+        locations.push(work.jobs[job].location);
+        console.log('added job.location ...');
     }
 
+    console.log(locations)
     return locations;
   }
 
@@ -167,10 +187,16 @@ function initializeMap() {
     var infoWindow = new google.maps.InfoWindow({
       content: name
     });
+	
+	
 
     // hmmmm, I wonder what this is about...
     google.maps.event.addListener(marker, 'click', function() {
       // your code goes here!
+	  
+		
+	  console.log('maps event regarding ' + name);
+	  return 1;
     });
 
     // this is where the pin actually gets added to the map.
@@ -233,11 +259,11 @@ Uncomment the code below when you're ready to implement a Google Map!
 */
 
 // Calls the initializeMap() function when the page loads
-//window.addEventListener('load', initializeMap);
+    window.addEventListener('load', initializeMap);
 
 // Vanilla JS way to listen for resizing of the window
 // and adjust map bounds
-//window.addEventListener('resize', function(e) {
+window.addEventListener('resize', function(e) {
   // Make sure the map bounds get updated on page resize
-//  map.fitBounds(mapBounds);
-//});
+  map.fitBounds(mapBounds);
+});
